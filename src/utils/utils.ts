@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { SPACE } from '../const.js';
 import { ensureError } from './errors.js';
+import type { Config } from '../types.js';
 
 export function loadFile(path: string): string {
   try {
@@ -18,6 +19,16 @@ export function writeFile(path: string, data: string) {
   } catch (err) {
     const error = ensureError(err);
     console.error(`Cannot write file "${path}", Error: "${error.message}"`);
+    process.exit(1);
+  }
+}
+
+export function parseConfig(config: string): Config {
+  try {
+    return JSON.parse(config);
+  } catch (err) {
+    const error = ensureError(err);
+    console.error(`Cannot parse config file, Error: "${error.message}"`);
     process.exit(1);
   }
 }

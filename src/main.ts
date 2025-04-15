@@ -1,56 +1,53 @@
-import {
-  bannerPath,
-  svgPath,
-  CONTENT_END,
-  CONTENT_START,
-  LINE_FEED
-} from './const.js';
+#!/usr/bin/env node
+
+import { Command } from 'commander';
 import { Parser } from './filters/parser.js';
 import { Transformer } from './filters/transformer.js';
 import { Pump } from './pump.js';
-import { loadFile, stringRangeReplace, writeFile } from './utils/utils.js';
+import {
+  loadFile,
+  parseConfig,
+  stringRangeReplace,
+  writeFile
+} from './utils/utils.js';
+import { CONTENT_END, CONTENT_START, LINE_FEED } from './const.js';
+import infos from '../package.json' with { type: 'json' };
 
-const config = {
-  text: {
-    initX: 15,
-    initY: 30,
-    incY: 20,
-    customAttr: 'opacity="0"'
-  },
-  animation: {
-    enabled: true,
-    dur: 0.2,
-    begin: 0,
-    attributeName: 'opacity',
-    values: '0;1',
-    fill: 'freeze',
-    calcMode: 'discrete'
-  }
-};
+// ─── Program ─────────────────────────────────────────────────────────────────────────
+const program = new Command();
+program.version(infos.version);
+
+// ─── Options ─────────────────────────────────────────────────────────────────────────
+program
+  .requiredOption('-c, --config <.json>', 'JSON config file path')
+  .requiredOption('-i, --input <.txt>', 'TXT input file path')
+  .requiredOption('-o, --output <.svg>', 'SVG output file path');
+
+program.parse();
+
+const { config, input, output } = program.opts();
 
 // ─── Load ────────────────────────────────────────────────────────────────────────────
-const inputFile = loadFile(bannerPath);
-const outputFile = loadFile(svgPath);
+const inputData = loadFile(input);
+const outputData = loadFile(output);
+
+const configData = loadFile(config);
+const configObject = parseConfig(configData);
 
 // ─── process ─────────────────────────────────────────────────────────────────────────
 const pump = new Pump<string, string>()
   .addFilter(new Parser())
-  .addFilter(new Transformer(config));
+  .addFilter(new Transformer(configObject));
 
-const output = pump.process(inputFile);
+const pumpProcess = pump.process(inputData);
 
 // ─── output ──────────────────────────────────────────────────────────────────────────
-const newOutput = stringRangeReplace(
-  outputFile,
-  LINE_FEED + output + LINE_FEED,
+const newOutputData = stringRangeReplace(
+  outputData,
+  LINE_FEED + pumpProcess + LINE_FEED,
   CONTENT_START,
   CONTENT_END
 );
 
-try {
-  writeFile(svgPath, newOutput);
-} catch (error) {
-  console.error(`Unable to write file ${svgPath}, error: ${error}`);
-} finally {
-  console.log('Output file updated');
-}
+writeFile(output, newOutputData);
+console.log('Output file updated');
