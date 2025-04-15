@@ -1,12 +1,25 @@
 import fs from 'node:fs';
 import { SPACE } from '../const.js';
+import { ensureError } from './errors.js';
 
 export function loadFile(path: string): string {
-  return fs.readFileSync(path, 'utf-8').toString();
+  try {
+    return fs.readFileSync(path, 'utf-8').toString();
+  } catch (err) {
+    const error = ensureError(err);
+    console.error(`Cannot load file "${path}", Error: "${error.message}"`);
+    process.exit(1);
+  }
 }
 
 export function writeFile(path: string, data: string) {
-  fs.writeFileSync(path, data);
+  try {
+    fs.writeFileSync(path, data);
+  } catch (err) {
+    const error = ensureError(err);
+    console.error(`Cannot write file "${path}", Error: "${error.message}"`);
+    process.exit(1);
+  }
 }
 
 export function objectToAttributes(
