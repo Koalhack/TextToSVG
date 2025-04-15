@@ -1,10 +1,14 @@
-import fs from 'node:fs';
-import { bannerPath } from './const.js';
+import {
+  bannerPath,
+  svgPath,
+  CONTENT_END,
+  CONTENT_START,
+  LINE_FEED
+} from './const.js';
 import { Parser } from './filters/parser.js';
 import { Transformer } from './filters/transformer.js';
 import { Pump } from './pump.js';
-
-const fileContent = fs.readFileSync(bannerPath).toString();
+import { loadFile, stringRangeReplace, writeFile } from './utils/utils.js';
 
 const config = {
   text: {
@@ -24,10 +28,29 @@ const config = {
   }
 };
 
+// ─── Load ────────────────────────────────────────────────────────────────────────────
+const inputFile = loadFile(bannerPath);
+const outputFile = loadFile(svgPath);
+
+// ─── process ─────────────────────────────────────────────────────────────────────────
 const pump = new Pump<string, string>()
   .addFilter(new Parser())
   .addFilter(new Transformer(config));
 
-const output = pump.process(fileContent);
+const output = pump.process(inputFile);
 
-console.log(output);
+// ─── output ──────────────────────────────────────────────────────────────────────────
+const newOutput = stringRangeReplace(
+  outputFile,
+  LINE_FEED + output + LINE_FEED,
+  CONTENT_START,
+  CONTENT_END
+);
+
+try {
+  writeFile(svgPath, newOutput);
+} catch (error) {
+  console.error(`Unable to write file ${svgPath}, error: ${error}`);
+} finally {
+  console.log('Output file updated');
+}
