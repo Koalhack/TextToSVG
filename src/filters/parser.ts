@@ -9,13 +9,8 @@ export type part = {
 export class Parser implements Filter<string, part[][]> {
   process(input: string): part[][] {
     const lines = input.trim().split(LINES_SEPARTOR);
-    const nonEmptyLines = this.removeEmptyLines(lines);
 
-    return nonEmptyLines.map(line => this.tagParser(line));
-  }
-
-  private removeEmptyLines(lines: string[]): string[] {
-    return lines.filter(line => line.trim() !== NOTHING);
+    return lines.map(line => this.tagParser(line));
   }
 
   private tagParser(line: string): part[] {
