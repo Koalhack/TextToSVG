@@ -16,6 +16,7 @@ export const bannerPath = path.join(__rootpath, 'dist', 'banner.txt');
 // └                   ┘
 
 export const NOTHING = '';
+export const SPACE = ' ';
 export const CARRIAGE_RETURN = '\r';
 export const LINE_FEED = '\n';
 

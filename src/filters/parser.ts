@@ -1,7 +1,7 @@
 import { LINES_SEPARTOR, NOTHING, TAG, TAG_NAME, TAG_VALUE } from '../const.js';
 import type { Filter } from './interface.js';
 
-type part = {
+export type part = {
   name?: string;
   value: string;
 };
