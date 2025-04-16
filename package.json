@@ -1,23 +1,25 @@
 {
   "name": "texttosvg",
-  "version": "1.0.0",
-  "description": "a simple utility script to convert ASCII file to a animated SVG",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc"
-  },
+  "version": "0.0.1",
+  "license": "ISC",
+  "description": "a simple utility CLI tool to convert ASCII file to a animated SVG",
+  "keywords": [],
+  "author": "Koalhack",
+  "homepage": "https://github.com/Koalhack/TextToSVG#readme",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Koalhack/TextToSVG.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/Koalhack/TextToSVG/issues"
   },
-  "homepage": "https://github.com/Koalhack/TextToSVG#readme",
+  "main": "./dist/main.js",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "bin": "./dist/main.js",
   "devDependencies": {
     "@types/node": "^22.14.1",
     "prettier": "^3.5.3",
