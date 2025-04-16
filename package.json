@@ -1,5 +1,5 @@
 {
-  "name": "texttosvg",
+  "name": "txt-svg",
   "version": "0.0.1",
   "license": "ISC",
   "description": "a simple utility CLI tool to convert ASCII file to a animated SVG",
