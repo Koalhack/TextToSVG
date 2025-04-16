@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check Out Repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -19,9 +19,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies 📦
-      - run: npm ci
+        run: npm ci
 
       - name: Publish to npmjs
-      - run: npm publish --access public
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
