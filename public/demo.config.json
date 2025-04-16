@@ -1,0 +1,17 @@
+{
+  "text": {
+    "initX": 15,
+    "initY": 30,
+    "incY": 20,
+    "customAttr": "opacity=\"0\" fill=\"#FFFFFF\""
+  },
+  "animation": {
+    "enabled": true,
+    "dur": 0.2,
+    "begin": 0,
+    "attributeName": "opacity",
+    "values": "0;1",
+    "fill": "freeze",
+    "calcMode": "discrete"
+  }
+}
